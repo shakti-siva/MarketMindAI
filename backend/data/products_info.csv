@@ -1,0 +1,9 @@
+product_id,product_name,brand_name,price_usd,ingredients,rating,loves_count,category
+P001,Ultra Hydrating Water Cream,LumiSkin,38.0,"Water, Squalane, Glycerin, Hyaluronic Acid, Ceramides, Niacinamide, Phenoxyethanol",4.6,25000,Moisturizers
+P002,Retinol Youth Renewal Serum,Dermacell,85.0,"Water, Glycerin, Retinol, Ceramide NP, Hyaluronic Acid, Peptides, Tocopherol (Vitamin E)",4.2,42000,Treatments
+P003,10% Niacinamide Oil-Control Serum,GlowCo,28.0,"Water, Niacinamide, Zinc PCA, Hyaluronic Acid, Phenoxyethanol, Ethylhexylglycerin",3.9,18000,Treatments
+P004,C-Bright Radiance Booster,Aura Organics,52.0,"Water, Ascorbic Acid (Vitamin C), Ferulic Acid, Vitamin E, Squalane, Citrus Aurantium Dulcis Fruit Extract",4.1,15000,Treatments
+P005,Salicylic Acid Pore Clearing Gel,ClearSkin Labs,24.0,"Water, Salicylic Acid, Tea Tree Oil, Centella Asiatica Extract, Glycerin, Alcohol Denat",4.3,29000,Treatments
+P006,Ceramide Barrier Defense Balm,Dermacell,45.0,"Water, Caprylic/Capric Triglyceride, Ceramide NP, Ceramide AP, Ceramide EOP, Phytosphingosine, Cholesterol, Shea Butter",4.8,31000,Moisturizers
+P007,Centella Soothing Gel Cleanser,LumiSkin,22.0,"Water, Cocamidopropyl Betaine, Glycerin, Centella Asiatica Extract, Green Tea Extract, Panthenol",4.5,12000,Cleansers
+P008,Peptide Plumping Night Cream,GlowCo,64.0,"Water, Glycerin, Acetyl Hexapeptide-8, Palmitoyl Tripeptide-1, Ceramides, Squalane, Jojoba Oil",4.7,22000,Moisturizers

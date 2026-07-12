@@ -1,0 +1,522 @@
+[
+  {
+    "key": "ceramides",
+    "name": "Ceramides",
+    "category": "Barrier Repair",
+    "momentum": 90.5,
+    "google_interest": 5,
+    "reddit_mentions": 0,
+    "reddit_growth": 0,
+    "news_mentions": 0,
+    "summary": "Ceramides are connected to barrier repair, hydration, and sensitive skin recovery.",
+    "history": [
+      {
+        "month": "Jun 2025",
+        "interest": 2
+      },
+      {
+        "month": "Jul 2025",
+        "interest": 2
+      },
+      {
+        "month": "Aug 2025",
+        "interest": 3
+      },
+      {
+        "month": "Sep 2025",
+        "interest": 3
+      },
+      {
+        "month": "Oct 2025",
+        "interest": 4
+      },
+      {
+        "month": "Nov 2025",
+        "interest": 4
+      },
+      {
+        "month": "Dec 2025",
+        "interest": 4
+      },
+      {
+        "month": "Jan 2026",
+        "interest": 4
+      },
+      {
+        "month": "Feb 2026",
+        "interest": 5
+      },
+      {
+        "month": "Mar 2026",
+        "interest": 8
+      },
+      {
+        "month": "Apr 2026",
+        "interest": 9
+      },
+      {
+        "month": "May 2026",
+        "interest": 8
+      },
+      {
+        "month": "Jun 2026",
+        "interest": 6
+      }
+    ]
+  },
+  {
+    "key": "peptides",
+    "name": "Peptides",
+    "category": "Anti-Aging / Skin Firming",
+    "momentum": 79.6,
+    "google_interest": 25,
+    "reddit_mentions": 0,
+    "reddit_growth": 0,
+    "news_mentions": 0,
+    "summary": "Peptides are linked to firming, collagen support, and barrier-friendly anti-aging routines.",
+    "history": [
+      {
+        "month": "Jun 2025",
+        "interest": 14
+      },
+      {
+        "month": "Jul 2025",
+        "interest": 15
+      },
+      {
+        "month": "Aug 2025",
+        "interest": 17
+      },
+      {
+        "month": "Sep 2025",
+        "interest": 16
+      },
+      {
+        "month": "Oct 2025",
+        "interest": 16
+      },
+      {
+        "month": "Nov 2025",
+        "interest": 19
+      },
+      {
+        "month": "Dec 2025",
+        "interest": 18
+      },
+      {
+        "month": "Jan 2026",
+        "interest": 25
+      },
+      {
+        "month": "Feb 2026",
+        "interest": 25
+      },
+      {
+        "month": "Mar 2026",
+        "interest": 32
+      },
+      {
+        "month": "Apr 2026",
+        "interest": 38
+      },
+      {
+        "month": "May 2026",
+        "interest": 33
+      },
+      {
+        "month": "Jun 2026",
+        "interest": 26
+      }
+    ]
+  },
+  {
+    "key": "hyaluronic acid",
+    "name": "Hyaluronic Acid",
+    "category": "Hydration / Plumping",
+    "momentum": 33.6,
+    "google_interest": 59,
+    "reddit_mentions": 0,
+    "reddit_growth": 0,
+    "news_mentions": 0,
+    "summary": "Hyaluronic acid is linked to hydration, plumping, and lightweight moisture routines.",
+    "history": [
+      {
+        "month": "Jun 2025",
+        "interest": 48
+      },
+      {
+        "month": "Jul 2025",
+        "interest": 50
+      },
+      {
+        "month": "Aug 2025",
+        "interest": 55
+      },
+      {
+        "month": "Sep 2025",
+        "interest": 48
+      },
+      {
+        "month": "Oct 2025",
+        "interest": 53
+      },
+      {
+        "month": "Nov 2025",
+        "interest": 57
+      },
+      {
+        "month": "Dec 2025",
+        "interest": 54
+      },
+      {
+        "month": "Jan 2026",
+        "interest": 58
+      },
+      {
+        "month": "Feb 2026",
+        "interest": 69
+      },
+      {
+        "month": "Mar 2026",
+        "interest": 75
+      },
+      {
+        "month": "Apr 2026",
+        "interest": 90
+      },
+      {
+        "month": "May 2026",
+        "interest": 74
+      },
+      {
+        "month": "Jun 2026",
+        "interest": 59
+      }
+    ]
+  },
+  {
+    "key": "squalane",
+    "name": "Squalane",
+    "category": "Hydration / Barrier Support",
+    "momentum": 26.9,
+    "google_interest": 7,
+    "reddit_mentions": 0,
+    "reddit_growth": 0,
+    "news_mentions": 0,
+    "summary": "Squalane is popular for lightweight, non-greasy hydration and barrier support.",
+    "history": [
+      {
+        "month": "Jun 2025",
+        "interest": 7
+      },
+      {
+        "month": "Jul 2025",
+        "interest": 7
+      },
+      {
+        "month": "Aug 2025",
+        "interest": 8
+      },
+      {
+        "month": "Sep 2025",
+        "interest": 7
+      },
+      {
+        "month": "Oct 2025",
+        "interest": 7
+      },
+      {
+        "month": "Nov 2025",
+        "interest": 9
+      },
+      {
+        "month": "Dec 2025",
+        "interest": 8
+      },
+      {
+        "month": "Jan 2026",
+        "interest": 8
+      },
+      {
+        "month": "Feb 2026",
+        "interest": 9
+      },
+      {
+        "month": "Mar 2026",
+        "interest": 10
+      },
+      {
+        "month": "Apr 2026",
+        "interest": 12
+      },
+      {
+        "month": "May 2026",
+        "interest": 10
+      },
+      {
+        "month": "Jun 2026",
+        "interest": 8
+      }
+    ]
+  },
+  {
+    "key": "niacinamide",
+    "name": "Niacinamide",
+    "category": "Oil Control / Pore Refining",
+    "momentum": 24.6,
+    "google_interest": 42,
+    "reddit_mentions": 0,
+    "reddit_growth": 0,
+    "news_mentions": 0,
+    "summary": "Niacinamide is used for oil control, pores, redness, and barrier support.",
+    "history": [
+      {
+        "month": "Jun 2025",
+        "interest": 35
+      },
+      {
+        "month": "Jul 2025",
+        "interest": 38
+      },
+      {
+        "month": "Aug 2025",
+        "interest": 40
+      },
+      {
+        "month": "Sep 2025",
+        "interest": 38
+      },
+      {
+        "month": "Oct 2025",
+        "interest": 40
+      },
+      {
+        "month": "Nov 2025",
+        "interest": 42
+      },
+      {
+        "month": "Dec 2025",
+        "interest": 39
+      },
+      {
+        "month": "Jan 2026",
+        "interest": 40
+      },
+      {
+        "month": "Feb 2026",
+        "interest": 42
+      },
+      {
+        "month": "Mar 2026",
+        "interest": 53
+      },
+      {
+        "month": "Apr 2026",
+        "interest": 61
+      },
+      {
+        "month": "May 2026",
+        "interest": 55
+      },
+      {
+        "month": "Jun 2026",
+        "interest": 42
+      }
+    ]
+  },
+  {
+    "key": "vitamin c",
+    "name": "Vitamin C",
+    "category": "Brightening / Antioxidant",
+    "momentum": 22.1,
+    "google_interest": 48,
+    "reddit_mentions": 0,
+    "reddit_growth": 0,
+    "news_mentions": 0,
+    "summary": "Vitamin C is associated with brightening, antioxidant protection, and hyperpigmentation care.",
+    "history": [
+      {
+        "month": "Jun 2025",
+        "interest": 43
+      },
+      {
+        "month": "Jul 2025",
+        "interest": 45
+      },
+      {
+        "month": "Aug 2025",
+        "interest": 49
+      },
+      {
+        "month": "Sep 2025",
+        "interest": 45
+      },
+      {
+        "month": "Oct 2025",
+        "interest": 46
+      },
+      {
+        "month": "Nov 2025",
+        "interest": 48
+      },
+      {
+        "month": "Dec 2025",
+        "interest": 44
+      },
+      {
+        "month": "Jan 2026",
+        "interest": 47
+      },
+      {
+        "month": "Feb 2026",
+        "interest": 51
+      },
+      {
+        "month": "Mar 2026",
+        "interest": 61
+      },
+      {
+        "month": "Apr 2026",
+        "interest": 70
+      },
+      {
+        "month": "May 2026",
+        "interest": 60
+      },
+      {
+        "month": "Jun 2026",
+        "interest": 49
+      }
+    ]
+  },
+  {
+    "key": "salicylic acid",
+    "name": "Salicylic Acid",
+    "category": "Acne / Exfoliation",
+    "momentum": 21.6,
+    "google_interest": 65,
+    "reddit_mentions": 0,
+    "reddit_growth": 0,
+    "news_mentions": 0,
+    "summary": "Salicylic acid remains a core acne-care ingredient for oily and clogged skin.",
+    "history": [
+      {
+        "month": "Jun 2025",
+        "interest": 53
+      },
+      {
+        "month": "Jul 2025",
+        "interest": 57
+      },
+      {
+        "month": "Aug 2025",
+        "interest": 59
+      },
+      {
+        "month": "Sep 2025",
+        "interest": 58
+      },
+      {
+        "month": "Oct 2025",
+        "interest": 56
+      },
+      {
+        "month": "Nov 2025",
+        "interest": 55
+      },
+      {
+        "month": "Dec 2025",
+        "interest": 50
+      },
+      {
+        "month": "Jan 2026",
+        "interest": 53
+      },
+      {
+        "month": "Feb 2026",
+        "interest": 58
+      },
+      {
+        "month": "Mar 2026",
+        "interest": 74
+      },
+      {
+        "month": "Apr 2026",
+        "interest": 84
+      },
+      {
+        "month": "May 2026",
+        "interest": 76
+      },
+      {
+        "month": "Jun 2026",
+        "interest": 66
+      }
+    ]
+  },
+  {
+    "key": "retinol",
+    "name": "Retinol",
+    "category": "Anti-Aging / Retinoids",
+    "momentum": 19.7,
+    "google_interest": 63,
+    "reddit_mentions": 0,
+    "reddit_growth": 0,
+    "news_mentions": 0,
+    "summary": "Retinol remains powerful but may face concerns around irritation and barrier damage.",
+    "history": [
+      {
+        "month": "Jun 2025",
+        "interest": 54
+      },
+      {
+        "month": "Jul 2025",
+        "interest": 57
+      },
+      {
+        "month": "Aug 2025",
+        "interest": 62
+      },
+      {
+        "month": "Sep 2025",
+        "interest": 62
+      },
+      {
+        "month": "Oct 2025",
+        "interest": 65
+      },
+      {
+        "month": "Nov 2025",
+        "interest": 69
+      },
+      {
+        "month": "Dec 2025",
+        "interest": 62
+      },
+      {
+        "month": "Jan 2026",
+        "interest": 68
+      },
+      {
+        "month": "Feb 2026",
+        "interest": 69
+      },
+      {
+        "month": "Mar 2026",
+        "interest": 84
+      },
+      {
+        "month": "Apr 2026",
+        "interest": 89
+      },
+      {
+        "month": "May 2026",
+        "interest": 76
+      },
+      {
+        "month": "Jun 2026",
+        "interest": 63
+      }
+    ]
+  }
+]
