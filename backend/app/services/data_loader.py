@@ -17,8 +17,8 @@ def load_products():
 @lru_cache(maxsize=1)
 def load_reviews():
     review_files = [
-    f"{DATA_PATH}/reviews_sample.csv",
-    ] 
+        f"{DATA_PATH}/reviews_0_250.csv",
+    ]
 
     review_dfs = []
 
