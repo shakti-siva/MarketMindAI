@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
-import pandas as pd
 
 # Import services
 from .config import APP_NAME, VERSION
@@ -57,7 +56,7 @@ def list_products():
         p["review_count"] = float(p.get("reviews", 0))
         # Ensure NaN values are replaced with empty strings for JSON serialization
         for k, v in p.items():
-            if pd.isna(v):
+            if v is None or (isinstance(v, float) and v != v):
                 p[k] = ""
                 
     return products[:300]
