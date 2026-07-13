@@ -72,6 +72,10 @@ def list_products():
 
     products["review_count"] = products["review_count"].fillna(0)
 
+    # Architectural fix: Filter products that actually have reviews and sort by popularity
+    products = products[products["review_count"] > 0]
+    products = products.sort_values(by="review_count", ascending=False)
+
     return products.head(300).fillna("").to_dict(orient="records")
 
 @app.get("/api/customer-voice")

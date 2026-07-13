@@ -119,12 +119,17 @@ def get_customer_voice_dashboard(sample_size=10000):
 def get_product_customer_voice(product_id: str):
     data = load_all_data()
     reviews_raw = data["reviews"]
+    matches = reviews_raw[reviews_raw["product_id"].astype(str) == str(product_id)]
 
-    reviews = reviews_raw[reviews_raw["product_id"].astype(str) == str(product_id)].copy()
+    # Filter reviews for this product
+    reviews = reviews_raw[
+        reviews_raw["product_id"].astype(str).str.strip() == str(product_id).strip()
+    ].copy()
 
     if reviews.empty:
         return None
 
+    # Remove empty reviews
     reviews = reviews.dropna(subset=["review_text"]).copy()
 
     polarities = get_sentiment_polarities(reviews)
@@ -136,79 +141,134 @@ def get_product_customer_voice(product_id: str):
     reviews_text = reviews["review_text"].fillna("").str.lower()
 
     complaint_keywords = {
-        "packaging_leak": ["leak", "spill", "pump", "bottle", "dispenser"],
-        "skin_irritation": ["broke me out", "breakout", "acne", "bump", "rash", "burn", "redness", "itch"],
-        "greasy_residue": ["greasy", "oily", "heavy", "shiny", "thick"],
-        "makeup_pilling": ["pill", "makeup", "foundation", "flake", "peel"],
+        "packaging_leak": [
+            "leak", "spill", "pump", "bottle", "dispenser"
+        ],
+        "skin_irritation": [
+            "broke me out", "breakout", "acne",
+            "bump", "rash", "burn", "redness", "itch"
+        ],
+        "greasy_residue": [
+            "greasy", "oily", "heavy", "shiny", "thick"
+        ],
+        "makeup_pilling": [
+            "pill", "pilling", "flake", "peel", "makeup", "foundation"
+        ],
     }
 
     complaints = {}
     top_complaint = {"name": None, "count": 0}
+
+    ratings = pd.to_numeric(reviews["rating"], errors="coerce")
+
     for key, keywords in complaint_keywords.items():
-        mask = reviews_text.apply(lambda text: any(kw in text for kw in keywords))
-        ratings = pd.to_numeric(reviews["rating"], errors="coerce")
-        matches = reviews[mask & ((polarities < -0.05) | (ratings <= 2))]
-        count = int(matches.shape[0])
+        mask = reviews_text.apply(
+            lambda text: any(word in text for word in keywords)
+        )
+
+        matches = reviews[
+            mask & ((polarities < -0.05) | (ratings <= 2))
+        ]
+
+        count = len(matches)
+
         samples = []
         for _, row in matches.head(3).iterrows():
             samples.append({
                 "text": row.get("review_text", ""),
-                "rating": int(row.get("rating", 1)) if pd.notna(row.get("rating")) else 1,
+                "rating": int(row["rating"]) if pd.notna(row["rating"]) else 1,
                 "date": row.get("submission_time", "N/A"),
-                "author": row.get("author_id", "Anonymous")
+                "author": row.get("author_id", "Anonymous"),
             })
+
         complaints[key] = {
             "count": count,
-            "percentage": round((count / total) * 100, 1) if total > 0 else 0,
-            "samples": samples
+            "percentage": round(count / total * 100, 1) if total else 0,
+            "samples": samples,
         }
+
         if count > top_complaint["count"]:
             top_complaint = {"name": key, "count": count}
 
     praise_keywords = {
-        "intense_hydration": ["hydrate", "plump", "moist", "dewy", "soft"],
-        "fast_absorption": ["absorb", "sink", "lightweight", "quick", "fast"],
-        "clearing_effects": ["acne", "clear", "pimple", "redness", "sooth"],
+        "intense_hydration": [
+            "hydrate", "hydrating", "moist",
+            "moisture", "plump", "dewy", "soft"
+        ],
+        "fast_absorption": [
+            "absorb", "absorbs", "absorbed",
+            "lightweight", "quick", "fast"
+        ],
+        "clearing_effects": [
+            "clear", "cleared", "acne",
+            "pimple", "soothe", "soothing", "redness"
+        ],
     }
 
     praises = {}
     top_praise = {"name": None, "count": 0}
+
     for key, keywords in praise_keywords.items():
-        mask = reviews_text.apply(lambda text: any(kw in text for kw in keywords))
-        matches = reviews[mask & (polarities > 0.2)]
-        count = int(matches.shape[0])
+        mask = reviews_text.apply(
+            lambda text: any(word in text for word in keywords)
+        )
+
+        matches = reviews[
+            mask & (polarities > 0.2)
+        ]
+
+        count = len(matches)
+
         samples = []
         for _, row in matches.head(3).iterrows():
             samples.append({
                 "text": row.get("review_text", ""),
-                "rating": int(row.get("rating", 5)) if pd.notna(row.get("rating")) else 5,
+                "rating": int(row["rating"]) if pd.notna(row["rating"]) else 5,
                 "date": row.get("submission_time", "N/A"),
-                "author": row.get("author_id", "Anonymous")
+                "author": row.get("author_id", "Anonymous"),
             })
+
         praises[key] = {
             "count": count,
-            "percentage": round((count / total) * 100, 1) if total > 0 else 0,
-            "samples": samples
+            "percentage": round(count / total * 100, 1) if total else 0,
+            "samples": samples,
         }
+
         if count > top_praise["count"]:
             top_praise = {"name": key, "count": count}
 
-    product_name = reviews["product_name"].iloc[0] if "product_name" in reviews.columns else None
-    brand_name = reviews["brand_name"].iloc[0] if "brand_name" in reviews.columns else None
+    product_name = None
+    brand_name = None
+
+    if "product_name" in reviews.columns:
+        product_name = reviews["product_name"].iloc[0]
+
+    if "brand_name" in reviews.columns:
+        brand_name = reviews["brand_name"].iloc[0]
 
     return {
         "product_id": product_id,
         "product_name": product_name,
         "brand_name": brand_name,
-        "total_reviews_available": int(len(reviews_raw)),
-        "total_reviews": int(total),
+        "total_reviews_available": len(reviews_raw),
+        "total_reviews": total,
+
         "sentiment_percentages": {
-            "positive": round((sentiment_counts.get("positive", 0) / total) * 100, 1) if total > 0 else 0,
-            "neutral": round((sentiment_counts.get("neutral", 0) / total) * 100, 1) if total > 0 else 0,
-            "negative": round((sentiment_counts.get("negative", 0) / total) * 100, 1) if total > 0 else 0,
+            "positive": round(
+                sentiment_counts.get("positive", 0) / total * 100, 1
+            ) if total else 0,
+
+            "neutral": round(
+                sentiment_counts.get("neutral", 0) / total * 100, 1
+            ) if total else 0,
+
+            "negative": round(
+                sentiment_counts.get("negative", 0) / total * 100, 1
+            ) if total else 0,
         },
+
         "complaints": complaints,
         "praises": praises,
         "top_complaint": top_complaint["name"],
-        "top_praise": top_praise["name"]
-    }
+        "top_praise": top_praise["name"],
+    } 

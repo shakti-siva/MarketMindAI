@@ -73,7 +73,7 @@ export default function App() {
   };
 
   const navItems = [
-    { id: 'voice', label: 'Customer Voice', icon: <Smile size={18} /> },
+    { id: 'voice', label: 'Review Intelligence', icon: <Smile size={18} /> },
     { id: 'ingredients', label: 'Ingredient Intel', icon: <Layers size={18} /> },
     { id: 'trends', label: 'Trend Intel', icon: <TrendingUp size={18} /> },
     { id: 'psychology', label: 'Psychology Analyzer', icon: <BrainCircuit size={18} /> },

@@ -67,7 +67,7 @@ export default function CustomerVoice({ products, selectedProductId, setSelected
   if (!productData || !productData.sentiment_percentages) {
     return (
       <div className="glass-panel" style={{ padding: '24px' }}>
-        <h2>Customer Voice Intelligence</h2>
+        <h2>Review Intelligence</h2>
         <div style={{ marginTop: '16px' }}>
           <label style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Target Product:</label>
           <select
@@ -108,7 +108,7 @@ export default function CustomerVoice({ products, selectedProductId, setSelected
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 style={{ fontSize: '28px', color: 'var(--text-primary)' }}>Customer Voice Intelligence</h1>
+          <h1 style={{ fontSize: '28px', color: 'var(--text-primary)' }}>Review Intelligence</h1>
           <p style={{ color: 'var(--text-secondary)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             Analyze reviews, extract pain points, and monitor skin reaction alerts.
           </p>
