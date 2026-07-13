@@ -52,20 +52,10 @@ def read_root():
 @app.get("/api/products")
 def list_products():
     data = load_all_data()
-    reviews = data["reviews"].copy()
+    products = data["products"]
 
-    review_counts = (
-        reviews.groupby(["product_id", "product_name", "brand_name", "price_usd"])
-        .size()
-        .reset_index(name="review_count")
-        .sort_values("review_count", ascending=False)
-        .head(300)
-        .fillna("")
-    )
+    return products.fillna("").to_dict(orient="records")
 
-    return review_counts.to_dict(orient="records")
-
-    return products.to_dict(orient="records")
 @app.get("/api/customer-voice")
 def customer_voice_global():
     """Global customer sentiment, complaints, and praise dashboard."""
