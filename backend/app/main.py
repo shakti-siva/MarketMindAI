@@ -52,9 +52,27 @@ def read_root():
 @app.get("/api/products")
 def list_products():
     data = load_all_data()
-    products = data["products"]
 
-    return products.fillna("").to_dict(orient="records")
+    products = data["products"].copy()
+    reviews = data["reviews"].copy()
+
+    # Count reviews for each product
+    review_counts = (
+        reviews.groupby("product_id")
+        .size()
+        .reset_index(name="review_count")
+    )
+
+    # Merge review counts into products
+    products = products.merge(
+        review_counts,
+        on="product_id",
+        how="left"
+    )
+
+    products["review_count"] = products["review_count"].fillna(0)
+
+    return products.head(300).fillna("").to_dict(orient="records")
 
 @app.get("/api/customer-voice")
 def customer_voice_global():
