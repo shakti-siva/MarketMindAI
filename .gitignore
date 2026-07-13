@@ -10,7 +10,8 @@ backend/data/*.csv
 backend/data/*.parquet
 backend/data/*.zip
 backend/data/__pycache__/
-
+backend/data/reviews*.csv
+backend/data/*.csv
 # Environment files
 .env
 .env.*
