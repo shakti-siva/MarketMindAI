@@ -6,7 +6,7 @@ import pandas as pd
 
 # Import services
 from .config import APP_NAME, VERSION
-from .services.data_loader import load_all_data
+from .services.data_loader import get_products
 from .services.customer_voice import get_customer_voice_dashboard, get_product_customer_voice
 from .services.ingredient_intel import get_ingredient_analytics, check_pair_compatibility
 from .services.trend_intel import get_trend_intelligence, get_reddit_skincare_topics
@@ -29,8 +29,7 @@ app.add_middleware(
 # Startup event to verify/load data
 @app.on_event("startup")
 def startup_event():
-    print("Pre-loading datasets...")
-    load_all_data()
+    print("Backend initialized.")
 
 # Pydantic models for POST requests
 class CopyAnalyzeRequest(BaseModel):
@@ -51,32 +50,17 @@ def read_root():
 
 @app.get("/api/products")
 def list_products():
-    data = load_all_data()
-
-    products = data["products"].copy()
-    reviews = data["reviews"].copy()
-
-    # Count reviews for each product
-    review_counts = (
-        reviews.groupby("product_id")
-        .size()
-        .reset_index(name="review_count")
-    )
-
-    # Merge review counts into products
-    products = products.merge(
-        review_counts,
-        on="product_id",
-        how="left"
-    )
-
-    products["review_count"] = products["review_count"].fillna(0)
-
-    # Architectural fix: Filter products that actually have reviews and sort by popularity
-    products = products[products["review_count"] > 0]
-    products = products.sort_values(by="review_count", ascending=False)
-
-    return products.head(300).fillna("").to_dict(orient="records")
+    products = get_products()
+    
+    # Add a safe 'review_count' field for the frontend if they expect it
+    for p in products:
+        p["review_count"] = float(p.get("reviews", 0))
+        # Ensure NaN values are replaced with empty strings for JSON serialization
+        for k, v in p.items():
+            if pd.isna(v):
+                p[k] = ""
+                
+    return products[:300]
 
 @app.get("/api/customer-voice")
 def customer_voice_global():

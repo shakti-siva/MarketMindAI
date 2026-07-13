@@ -1,19 +1,7 @@
 from .customer_voice import get_product_customer_voice
 from .ingredient_intel import clean_ingredient_name, get_ingredient_analytics
 from .trend_intel import MOCK_TRENDS
-from .data_loader import load_all_data
-
-
-def get_product_details(product_id: str):
-    data = load_all_data()
-    products = data["products"]
-
-    match = products[products["product_id"].astype(str) == str(product_id)]
-
-    if match.empty:
-        return None
-
-    return match.iloc[0].to_dict()
+from .data_loader import get_product_details
 
 
 def get_primary_ingredient(product):

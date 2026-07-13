@@ -1,6 +1,6 @@
 import os
 from openai import OpenAI
-from .data_loader import load_datasets, get_product_details
+from .data_loader import get_products, get_product_details, get_total_reviews_count
 from .customer_voice import get_product_customer_voice
 from .trend_intel import get_trend_intelligence, get_reddit_skincare_topics
 from .ingredient_intel import get_ingredient_analytics
@@ -8,16 +8,19 @@ from ..config import OPENAI_API_KEY, OPENAI_MODEL
 
 def get_platform_context_summary():
     """Compiles a text summary of the current platform state to feed into the LLM context."""
-    products, reviews = load_datasets()
+    products = get_products()
+    total_reviews = get_total_reviews_count()
     trends = get_trend_intelligence()
     reddit = get_reddit_skincare_topics()
     ingredients = get_ingredient_analytics()
     
     summary = "--- MARKETMIND AI CURRENT KNOWLEDGE BASE ---\n\n"
+    summary += f"0. REVIEWS DATASET: {total_reviews} active reviews analyzed.\n\n"
     
     summary += "1. PRODUCTS CATALOG:\n"
-    for _, p in products.iterrows():
-        summary += f"- ID: {p['product_id']} | Name: {p['product_name']} | Brand: {p['brand_name']} | Rating: {p['rating']} | Category: {p['category']} | Ingredients: {p['ingredients']}\n"
+    for p in products[:50]:  # Limit to 50 for context size
+        ingredients_str = str(p.get('ingredients') or "")[:100]
+        summary += f"- ID: {p['product_id']} | Name: {p['product_name']} | Brand: {p['brand_name']} | Rating: {p.get('rating')} | Category: {p.get('secondary_category')} | Ingredients: {ingredients_str}...\n"
     
     summary += "\n2. ACTIVE INGREDIENT TRENDS (GOOGLE & REDDIT):\n"
     for t in trends:
