@@ -26,7 +26,7 @@ export default function PsychologyAnalyzer() {
     if (!targetText.trim()) return;
 
     setLoading(true);
-    fetch('http://${import.meta.env.VITE_API_URL}/api/psychology/analyze', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/psychology/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: targetText })

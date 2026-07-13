@@ -9,8 +9,8 @@ export default function TrendIntel() {
 
   useEffect(() => {
     Promise.all([
-      fetch('http://${import.meta.env.VITE_API_URL}/api/trends').then(res => res.json()),
-      fetch('http://${import.meta.env.VITE_API_URL}/api/trends/reddit-topics').then(res => res.json())
+      fetch(`${import.meta.env.VITE_API_URL}/api/trends`).then(res => res.json()),
+      fetch(`${import.meta.env.VITE_API_URL}/api/trends/reddit-topics`).then(res => res.json())
     ])
       .then(([trendsData, redditData]) => {
         setTrends(trendsData);

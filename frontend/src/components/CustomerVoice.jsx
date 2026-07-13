@@ -32,7 +32,7 @@ export default function CustomerVoice({ products, selectedProductId, setSelected
 
     setLoading(true);
 
-    fetch(`http://${import.meta.env.VITE_API_URL}/api/customer-voice/${selectedProductId}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/customer-voice/${selectedProductId}`)
       .then(res => {
         if (!res.ok) {
           setProductData(null);

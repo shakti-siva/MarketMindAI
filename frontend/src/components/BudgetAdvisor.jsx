@@ -14,7 +14,7 @@ export default function BudgetAdvisor({ products, selectedProductId, setSelected
   useEffect(() => {
     if (!selectedProductId) return;
     setLoading(true);
-    fetch(`http://${import.meta.env.VITE_API_URL}/api/budget/advise/${selectedProductId}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/budget/advise/${selectedProductId}`)
       .then(res => res.json())
       .then(data => {
         setAdvice(data);

@@ -13,7 +13,7 @@ export default function IngredientIntel() {
 
   // Fetch ingredient analytics
   useEffect(() => {
-    fetch('http://${import.meta.env.VITE_API_URL}/api/ingredients')
+    fetch(`${import.meta.env.VITE_API_URL}/api/ingredients`)
       .then(res => res.json())
       .then(data => {
         setIngredients(data);
@@ -26,7 +26,7 @@ export default function IngredientIntel() {
   useEffect(() => {
     if (!ing1 || !ing2) return;
     setCompLoading(true);
-    fetch(`http://${import.meta.env.VITE_API_URL}/api/ingredients/compatibility?ing1=${ing1}&ing2=${ing2}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/ingredients/compatibility?ing1=${ing1}&ing2=${ing2}`)
       .then(res => res.json())
       .then(data => {
         setCompatibility(data);

@@ -12,7 +12,7 @@ export default function CampaignPlanner({ products }) {
   const handleGenerate = () => {
     setLoading(true);
 
-    fetch('http://${import.meta.env.VITE_API_URL}/api/campaign/plan', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/campaign/plan`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

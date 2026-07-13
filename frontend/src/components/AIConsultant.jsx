@@ -30,7 +30,7 @@ export default function AIConsultant() {
     setResponse('');
     setCopied(false);
     
-    fetch('http://${import.meta.env.VITE_API_URL}/api/consult', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/consult`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: activeQuery })
@@ -42,7 +42,10 @@ export default function AIConsultant() {
       })
       .catch(err => {
         console.error("Error during consultation:", err);
-        setResponse("### Error\n⚠️ Connection error: Make sure the FastAPI backend is running on http://${import.meta.env.VITE_API_URL}.");
+        setResponse(
+          `### Error
+        ⚠️ Connection error: Make sure the FastAPI backend is running on ${import.meta.env.VITE_API_URL}.`
+        );
         setLoading(false);
       });
   };

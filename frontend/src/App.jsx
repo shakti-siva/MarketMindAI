@@ -27,7 +27,7 @@ export default function App() {
 
   // Fetch product list on mount
   useEffect(() => {
-    fetch('http://${import.meta.env.VITE_API_URL}/api/products')
+    fetch(`${import.meta.env.VITE_API_URL}/api/products`)
       .then(res => res.json())
       .then(data => {
         const productList = Array.isArray(data) ? data : [];
