@@ -1,5 +1,4 @@
-from textblob import TextBlob
-from .data_loader import get_recent_reviews_sample, get_product_reviews, get_total_reviews_count
+from .data_loader import get_recent_reviews_sample, get_product_reviews, get_total_reviews_count, get_product_review_count
 
 def analyze_sentiment(polarity):
     if polarity > 0.1:
@@ -8,16 +7,8 @@ def analyze_sentiment(polarity):
         return "negative"
     return "neutral"
 
-def get_sentiment_polarity(text):
-    if not text:
-        return 0.0
-    return TextBlob(str(text)).sentiment.polarity
-
-def process_reviews_analytics(reviews_list, total_available):
-    if not reviews_list:
-        return {}
-
-    total = len(reviews_list)
+def process_reviews_analytics(reviews_iter, total_available):
+    total = 0
     sentiment_counts = {"positive": 0, "neutral": 0, "negative": 0}
     
     complaint_keywords = {
@@ -37,13 +28,21 @@ def process_reviews_analytics(reviews_list, total_available):
     complaint_stats = {k: {"count": 0, "samples": []} for k in complaint_keywords.keys()}
     praise_stats = {k: {"count": 0, "samples": []} for k in praise_keywords.keys()}
     
-    for row in reviews_list:
+    product_name = None
+    brand_name = None
+    
+    for row in reviews_iter:
+        total += 1
+        if product_name is None:
+            product_name = row.get("product_name")
+            brand_name = row.get("brand_name")
+            
         text = str(row.get("review_text") or "")
         if not text.strip():
             continue
             
         lower_text = text.lower()
-        polarity = get_sentiment_polarity(text)
+        polarity = float(row.get("sentiment_polarity") or 0.0)
         sentiment = analyze_sentiment(polarity)
         sentiment_counts[sentiment] += 1
         
@@ -78,6 +77,9 @@ def process_reviews_analytics(reviews_list, total_available):
                             "author": row.get("author_id", "Anonymous")
                         })
                         
+    if total == 0:
+        return {}
+
     # Format complaints output
     complaints_out = {}
     top_complaint = {"name": None, "count": 0}
@@ -117,25 +119,27 @@ def process_reviews_analytics(reviews_list, total_available):
         "praises": praises_out,
         "top_complaint": top_complaint["name"],
         "top_praise": top_praise["name"],
+        "product_name": product_name,
+        "brand_name": brand_name,
     }
 
 def get_customer_voice_dashboard(sample_size=10000):
     total_available = get_total_reviews_count()
-    reviews_list = get_recent_reviews_sample(sample_size)
-    return process_reviews_analytics(reviews_list, total_available)
+    reviews_iter = get_recent_reviews_sample(sample_size)
+    return process_reviews_analytics(reviews_iter, total_available)
 
 def get_product_customer_voice(product_id: str):
-    reviews_list = get_product_reviews(product_id)
-    if not reviews_list:
+    total_available = get_product_review_count(product_id)
+    if total_available == 0:
         return None
         
-    total_available = len(reviews_list)
-    result = process_reviews_analytics(reviews_list, total_available)
+    reviews_iter = get_product_reviews(product_id)
+    result = process_reviews_analytics(reviews_iter, total_available)
+    if not result:
+        return None
     
     # Add product specifics
     result["product_id"] = product_id
-    result["product_name"] = reviews_list[0].get("product_name") if reviews_list else None
-    result["brand_name"] = reviews_list[0].get("brand_name") if reviews_list else None
     result["total_reviews"] = result["reviews_analyzed"]
     
     return result

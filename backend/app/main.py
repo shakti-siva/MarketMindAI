@@ -1,3 +1,9 @@
+import os
+import psutil
+import tracemalloc
+
+tracemalloc.start()
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -14,6 +20,18 @@ from .services.campaign_planner import generate_campaign_plan
 from .services.budget_advisor import advise_budget_allocation
 from .services.ai_consultant import generate_marketing_consultation
 
+def log_memory(context: str, stage: str):
+    process = psutil.Process(os.getpid())
+    rss_mb = process.memory_info().rss / 1024 / 1024
+    print(f"[{context}] {stage} - RSS: {rss_mb:.2f} MB")
+
+def log_tracemalloc(context: str):
+    snapshot = tracemalloc.take_snapshot()
+    top_stats = snapshot.statistics("lineno")
+    print(f"[{context}] Top 5 memory allocations:")
+    for stat in top_stats[:5]:
+        print(stat)
+
 app = FastAPI(title=APP_NAME, version=VERSION)
 
 # Enable CORS for frontend integration
@@ -28,7 +46,10 @@ app.add_middleware(
 # Startup event to verify/load data
 @app.on_event("startup")
 def startup_event():
+    log_memory("Startup Hook", "Before hook")
     print("Backend initialized.")
+    log_memory("Startup Hook", "After hook")
+    log_tracemalloc("Startup Hook")
 
 # Pydantic models for POST requests
 class CopyAnalyzeRequest(BaseModel):
@@ -49,7 +70,9 @@ def read_root():
 
 @app.get("/api/products")
 def list_products():
+    log_memory("/api/products", "Before query")
     products = get_products()
+    log_memory("/api/products", "After query / Before processing")
     
     # Add a safe 'review_count' field for the frontend if they expect it
     for p in products:
@@ -59,17 +82,26 @@ def list_products():
             if v is None or (isinstance(v, float) and v != v):
                 p[k] = ""
                 
+    log_memory("/api/products", "After processing / Before return JSON")
+    log_tracemalloc("/api/products")
     return products[:300]
 
 @app.get("/api/customer-voice")
 def customer_voice_global():
     """Global customer sentiment, complaints, and praise dashboard."""
-    return get_customer_voice_dashboard()
+    log_memory("/api/customer-voice", "Before query")
+    data = get_customer_voice_dashboard()
+    log_memory("/api/customer-voice", "After query and processing / Before return JSON")
+    log_tracemalloc("/api/customer-voice")
+    return data
 
 @app.get("/api/customer-voice/{product_id}")
 def customer_voice_product(product_id: str):
     """Detailed review sentiment and complaint report for a specific product."""
+    log_memory(f"/api/customer-voice/{product_id}", "Before query")
     data = get_product_customer_voice(product_id)
+    log_memory(f"/api/customer-voice/{product_id}", "After query and processing / Before return JSON")
+    log_tracemalloc(f"/api/customer-voice/{product_id}")
     if not data:
         raise HTTPException(status_code=404, detail="Product not found or has no reviews")
     return data
@@ -77,7 +109,11 @@ def customer_voice_product(product_id: str):
 @app.get("/api/ingredients")
 def ingredient_analytics():
     """Rankings, popularity, and success scores of skincare ingredients."""
-    return get_ingredient_analytics()
+    log_memory("/api/ingredients", "Before query")
+    data = get_ingredient_analytics()
+    log_memory("/api/ingredients", "After query and processing / Before return JSON")
+    log_tracemalloc("/api/ingredients")
+    return data
 
 @app.get("/api/ingredients/compatibility")
 def ingredient_compatibility(ing1: str = Query(...), ing2: str = Query(...)):
@@ -87,7 +123,11 @@ def ingredient_compatibility(ing1: str = Query(...), ing2: str = Query(...)):
 @app.get("/api/trends")
 def trend_intelligence():
     """Google Trends and Reddit statistics with monthly momentum."""
-    return get_trend_intelligence()
+    log_memory("/api/trends", "Before query")
+    data = get_trend_intelligence()
+    log_memory("/api/trends", "After query and processing / Before return JSON")
+    log_tracemalloc("/api/trends")
+    return data
 
 @app.get("/api/trends/reddit-topics")
 def reddit_topics():
@@ -114,7 +154,10 @@ def campaign_planner(payload: CampaignPlanRequest):
 @app.get("/api/budget/advise/{product_id}")
 def budget_advisor(product_id: str):
     """Recommends spend allocation between Marketing and Product Improvement."""
+    log_memory(f"/api/budget/advise/{product_id}", "Before query")
     advice = advise_budget_allocation(product_id)
+    log_memory(f"/api/budget/advise/{product_id}", "After query and processing / Before return JSON")
+    log_tracemalloc(f"/api/budget/advise/{product_id}")
     if not advice:
         raise HTTPException(status_code=404, detail="Product not found")
     return advice

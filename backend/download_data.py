@@ -18,19 +18,7 @@ REQUIRED_CSVS = [
 ]
 
 def is_db_ready():
-    if not DB_PATH.exists():
-        return False
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='products'")
-        has_products = cursor.fetchone() is not None
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='reviews'")
-        has_reviews = cursor.fetchone() is not None
-        conn.close()
-        return has_products and has_reviews
-    except sqlite3.Error:
-        return False
+    return DB_PATH.exists()
 
 def check_missing_csvs():
     missing = []
@@ -74,6 +62,12 @@ def download_dataset():
         print(f"ERROR downloading dataset: {e}")
         sys.exit(1)
 
+def _get_sentiment(text):
+    from textblob import TextBlob
+    if not isinstance(text, str) or not text.strip():
+        return 0.0
+    return TextBlob(text).sentiment.polarity
+
 def convert_csv_to_sqlite():
     print(f"Creating SQLite database at {DB_PATH}...")
     conn = sqlite3.connect(DB_PATH)
@@ -92,6 +86,8 @@ def convert_csv_to_sqlite():
         if csv_path.exists():
             print(f"Loading {r_file} into SQLite...")
             for chunk in pd.read_csv(csv_path, chunksize=20000, low_memory=False):
+                print(f"Calculating sentiment for chunk in {r_file}...")
+                chunk["sentiment_polarity"] = chunk["review_text"].apply(_get_sentiment)
                 chunk.to_sql("reviews", conn, if_exists="append", index=False)
                 
     print("Creating indexes on products and reviews...")
