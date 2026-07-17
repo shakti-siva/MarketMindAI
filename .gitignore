@@ -16,6 +16,7 @@ backend/data/marketmind.db
 backend/data/*.db
 backend/data/*.sqlite
 backend/data/*.sqlite3
+backend/data/trend_cache.json
 # Environment files
 .env
 .env.*

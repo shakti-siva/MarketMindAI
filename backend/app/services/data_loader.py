@@ -1,89 +1,154 @@
+"""
+data_loader.py
+
+All SQLite query helpers for the MarketMind AI backend.
+
+Real Sephora dataset column reference
+--------------------------------------
+products : product_id, product_name, brand_name, price_usd, rating,
+           reviews (count), loves_count, primary_category, highlights,
+           secondary_category, tertiary_category, ingredients, ...
+
+reviews  : product_id, product_name, brand_name, author_id, rating,
+           submission_time, review_text, review_title, sentiment_polarity,
+           is_recommended, skin_tone, skin_type, eye_color, hair_color, ...
+"""
+
 import sqlite3
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DATA_PATH = BASE_DIR / "data"
-DB_PATH = DATA_PATH / "marketmind.db"
+DB_PATH = BASE_DIR / "data" / "marketmind.db"
+
 
 def dict_factory(cursor, row):
-    d = {}
-    for idx, col in enumerate(cursor.description):
-        d[col[0]] = row[idx]
-    return d
+    return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
+
 
 def get_connection():
     conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     conn.row_factory = dict_factory
     return conn
 
+
+# ---------------------------------------------------------------------------
+# Products
+# ---------------------------------------------------------------------------
+
 def get_products():
-    """Returns all products as a list of dicts."""
+    """
+    Returns all products ordered by review count descending.
+    Selects the subset of columns needed by the frontend.
+    """
     conn = get_connection()
     try:
-        cursor = conn.cursor()
-        cursor.execute("SELECT product_id, product_name, brand_name, rating, reviews, ingredients, price_usd, primary_category, highlights FROM products_with_reviews ORDER BY CAST(reviews AS INTEGER) DESC")
-        return cursor.fetchall()
+        return conn.execute(
+            """
+            SELECT product_id, product_name, brand_name, rating,
+                   reviews, loves_count, price_usd,
+                   primary_category, highlights, ingredients
+            FROM   products
+            ORDER  BY CAST(reviews AS INTEGER) DESC
+            """
+        ).fetchall()
     finally:
         conn.close()
+
 
 def get_product_details(product_id: str):
-    """Returns details for a single product."""
+    """Returns a single product row, or None if not found."""
     conn = get_connection()
     try:
-        cursor = conn.cursor()
-        cursor.execute("SELECT product_id, product_name, brand_name, rating, reviews, ingredients, price_usd, primary_category, highlights FROM products WHERE product_id = ?", (str(product_id),))
-        return cursor.fetchone()
+        return conn.execute(
+            """
+            SELECT product_id, product_name, brand_name, rating,
+                   reviews, loves_count, price_usd,
+                   primary_category, highlights, ingredients
+            FROM   products
+            WHERE  product_id = ?
+            """,
+            (str(product_id),),
+        ).fetchone()
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Reviews
+# ---------------------------------------------------------------------------
 
 def get_product_reviews(product_id: str):
-    """Returns all reviews for a specific product as a generator."""
+    """
+    Yields all review rows for the given product, fetching in chunks
+    of 1 000 to avoid materialising millions of rows at once.
+    """
     conn = get_connection()
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT review_text, rating, submission_time, author_id, product_name, brand_name, sentiment_polarity FROM reviews WHERE product_id = ?", (str(product_id),))
+        cursor.execute(
+            """
+            SELECT review_text, rating, submission_time, author_id,
+                   product_name, brand_name, sentiment_polarity
+            FROM   reviews
+            WHERE  product_id = ?
+            """,
+            (str(product_id),),
+        )
         while True:
             chunk = cursor.fetchmany(1000)
             if not chunk:
                 break
-            for row in chunk:
-                yield row
+            yield from chunk
     finally:
         conn.close()
 
-def get_recent_reviews_sample(limit: int = 10000):
-    """Returns a sample of the most recent reviews across all products as a generator."""
+
+def get_recent_reviews_sample(limit: int = 10_000):
+    """
+    Yields up to `limit` of the most recent reviews across all products,
+    useful for building the global sentiment dashboard without loading
+    the full 1.1 M row table.
+    """
     conn = get_connection()
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT review_text, rating, submission_time, author_id, product_name, brand_name, sentiment_polarity FROM reviews ORDER BY submission_time DESC LIMIT ?", (limit,))
+        cursor.execute(
+            """
+            SELECT review_text, rating, submission_time, author_id,
+                   product_name, brand_name, sentiment_polarity
+            FROM   reviews
+            ORDER  BY submission_time DESC
+            LIMIT  ?
+            """,
+            (limit,),
+        )
         while True:
             chunk = cursor.fetchmany(1000)
             if not chunk:
                 break
-            for row in chunk:
-                yield row
+            yield from chunk
     finally:
         conn.close()
 
-def get_total_reviews_count():
+
+def get_total_reviews_count() -> int:
     """Returns the total number of reviews in the database."""
     conn = get_connection()
     try:
-        cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) as count FROM reviews")
-        result = cursor.fetchone()
-        return result['count'] if result else 0
+        row = conn.execute("SELECT COUNT(*) AS count FROM reviews").fetchone()
+        return row["count"] if row else 0
     finally:
         conn.close()
 
-def get_product_review_count(product_id: str):
-    """Returns the total number of reviews for a specific product."""
+
+def get_product_review_count(product_id: str) -> int:
+    """Returns the number of reviews for a specific product."""
     conn = get_connection()
     try:
-        cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) as count FROM reviews WHERE product_id = ?", (str(product_id),))
-        result = cursor.fetchone()
-        return result['count'] if result else 0
+        row = conn.execute(
+            "SELECT COUNT(*) AS count FROM reviews WHERE product_id = ?",
+            (str(product_id),),
+        ).fetchone()
+        return row["count"] if row else 0
     finally:
         conn.close()

@@ -28,18 +28,18 @@ def get_ingredient_analytics():
     if not products:
         return []
 
-    # Map product_id to rating and review_count based on product info
+    # Map product_id → rating and review count
     product_stats = {}
     for p in products:
         try:
             rating = float(p.get("rating") or 0)
-            count = int(float(p.get("reviews") or 0)) # sometimes it's string float like "100.0"
+            count = int(float(p.get("reviews") or 0))
         except (ValueError, TypeError):
             rating, count = 0.0, 0
-            
+
         product_stats[p["product_id"]] = {
             "avg_rating": rating,
-            "review_count": count
+            "review_count": count,
         }
 
     ingredient_stats = defaultdict(lambda: {
@@ -110,7 +110,7 @@ def check_pair_compatibility(ing1: str, ing2: str):
         ("retinol", "salicylic acid"): {
             "status": "danger",
             "score": 30,
-            "message": "Both promote high cell turnover. Using together often leads to compromised skin barrier and severe dryness.",
+            "message": "Both promote high cell turnover. Using together often leads to a compromised skin barrier and severe dryness.",
             "synergy_type": "Over-exfoliation"
         },
         ("glycolic acid", "salicylic acid"): {
@@ -119,23 +119,23 @@ def check_pair_compatibility(ing1: str, ing2: str):
             "message": "Combining AHA and BHA can be too harsh for daily use unless formulated together at lower percentages.",
             "synergy_type": "Over-exfoliation"
         },
-        ("retinol", "glycolic acid"): {
+        ("glycolic acid", "retinol"): {
             "status": "danger",
             "score": 25,
             "message": "Extremely high risk of irritation. Do not layer these ingredients.",
             "synergy_type": "Severe Irritation"
         },
     }
-    
+
     # Synergy definitions
     synergies = {
-        ("retinol", "ceramides"): {
+        ("ceramides", "retinol"): {
             "status": "excellent",
             "score": 95,
             "message": "Perfect pair. Ceramides restore the skin barrier that retinol tends to disrupt, reducing irritation.",
             "synergy_type": "Barrier Repair"
         },
-        ("retinol", "niacinamide"): {
+        ("niacinamide", "retinol"): {
             "status": "excellent",
             "score": 90,
             "message": "Niacinamide calms the skin and stimulates ceramide production, making retinol much easier to tolerate.",
@@ -147,13 +147,13 @@ def check_pair_compatibility(ing1: str, ing2: str):
             "message": "Classic antioxidant synergy. Vitamin E stabilizes Vitamin C and quadruples its photoprotective power.",
             "synergy_type": "Antioxidant Boost"
         },
-        ("salicylic acid", "niacinamide"): {
+        ("niacinamide", "salicylic acid"): {
             "status": "good",
             "score": 85,
             "message": "Great for acne. BHA clears pores while niacinamide reduces inflammation and regulates oil.",
             "synergy_type": "Acne Clearing"
         },
-        ("hyaluronic acid", "ceramides"): {
+        ("ceramides", "hyaluronic acid"): {
             "status": "excellent",
             "score": 92,
             "message": "Ultimate hydration combo. HA draws in water while ceramides lock it in.",
